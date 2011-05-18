@@ -6,7 +6,7 @@ Attribute VB_Name = "MacroStats"
 '
 ' By Iain Dunning, 2011
 ' http://www.iaindunning.com
-' http://GITHUB
+' https://github.com/IainNZ/MacroStats
 '
 '------------------------------------------------------------------------------
 '
@@ -36,8 +36,10 @@ Attribute VB_Name = "MacroStats"
 '
 ' Project layout:
 ' MacroStats.bas
-'   - This file
-'   - The library itself, import this into your projects.
+'   - The library itself, IMPORT THIS INTO YOUR PROJECTS!
+' MacroStats.xlsm
+'   - The workbook used to develop the libary.
+'   - Don't need to add this to you to your project.
 ' MacroStatsTest.bas
 '   - Mainly used to aid development, not necessary to include in your
 '     projects.
@@ -50,7 +52,7 @@ Attribute VB_Name = "MacroStats"
 Public Function SampleDiscreteCDF( _
     ByRef CDF() As Variant, _
     Optional ByVal RaiseError As Boolean = False _
-) As Integer
+) As Long
 '------------------------------------------------------------------------------
 ' SampleDiscreteCDF
 ' Generate an random integer from a cumulative distribution function.
@@ -86,10 +88,133 @@ Public Function SampleDiscreteCDF( _
     Dim i As Long
     For i = LBound(CDF) To UBound(CDF)
         If R <= CDF(i) Then
-            sampleDiscrete = i
+            SampleDiscreteCDF = i
             Exit Function
         End If
     Next i
     
-    i = UBound(CDF)
+    ' If we got to this point, it must not have been a valid CDF because
+    ' the last element in the array was not a 1.
+    If RaiseError Then
+        Err.Raise vbObjectError + 1, "MacroStats.SampleDiscreteCDF", _
+                  "Unable to sample from CDF - check last element is 1."
+    End If
 End Function
+
+
+Public Function SampleDiscreteCDFon2D( _
+    ByRef CDF() As Variant, _
+    ByVal FirstIndex As Long, _
+    Optional ByVal RaiseError As Boolean = False _
+) As Long
+'------------------------------------------------------------------------------
+' SampleDiscreteCDFon2D
+' Generate an random integer from a cumulative distribution function.
+' Use this when you have a 2D array, where the CDF is in the second dimension.
+' For more information about CDFs:
+' http://en.wikipedia.org/wiki/Cumulative_distribution_function
+'
+' Input:
+'   CDF() as Variant
+'       - A one-dimensional array of numbers that describe a CDF.
+'   FirstIndex as Long
+'       - The index in the first dimension of the array.
+'   [Optional] RaiseError as Boolean
+'       - Default = False
+'       - If there is a problem with the CDF, and this value is true, then
+'         an error will be raised so you can address it
+'
+' Return:
+'   A random integer, chosen using the CDF.
+'   The integer is taken from the array indices of the second dimension.
+'
+' Example Usage:
+'   Dim myCDF(1 to 2, 3 to 6) as Double
+'   myCDF(1,3) = 0.1: myCDF(2,3) = 0.4:
+'   myCDF(1,4) = 0.4: myCDF(2,4) = 0.1:
+'   myCDF(1,5) = 0.4: myCDF(2,5) = 0.4:
+'   myCDF(1,6) = 0.1: myCDF(2,6) = 0.1:
+'   Debug.Print SampleDiscreteCDFon2D(myCDF, 2)
+'   ' 40% chance of returning a 3, 10% chance of a 4, etc.
+'
+'------------------------------------------------------------------------------
+
+    Dim R As Single
+    R = Rnd()
+    
+    Dim i As Long
+    For i = LBound(CDF, 2) To UBound(CDF, 2)
+        If R <= CDF(FirstIndex, i) Then
+            SampleDiscreteCDFon2D = i
+            Exit Function
+        End If
+    Next i
+    
+    ' If we got to this point, it must not have been a valid CDF because
+    ' the last element in the array was not a 1.
+    If RaiseError Then
+        Err.Raise vbObjectError + 1, "MacroStats.SampleDiscreteCDFon2D", _
+                  "Unable to sample from CDF - check last element is 1."
+    End If
+End Function
+
+
+Public Function SampleDiscreteCDFon3D( _
+    ByRef CDF() As Variant, _
+    ByVal FirstIndex As Long, _
+    ByVal SecondIndex As Long, _
+    Optional ByVal RaiseError As Boolean = False _
+) As Long
+'------------------------------------------------------------------------------
+' SampleDiscreteCDFon3D
+' Generate an random integer from a cumulative distribution function.
+' Use this when you have a 3D array, where the CDF is in the third dimension.
+' For more information about CDFs:
+' http://en.wikipedia.org/wiki/Cumulative_distribution_function
+'
+' Input:
+'   CDF() as Variant
+'       - A one-dimensional array of numbers that describe a CDF.
+'   FirstIndex as Long
+'       - The index in the first dimension of the array.
+'   SecondIndex as Long
+'       - The index in the second dimension of the array.
+'   [Optional] RaiseError as Boolean
+'       - Default = False
+'       - If there is a problem with the CDF, and this value is true, then
+'         an error will be raised so you can address it
+'
+' Return:
+'   A random integer, chosen using the CDF.
+'   The integer is taken from the array indices of the third dimension.
+'
+' Example Usage:
+'   Dim myCDF(9 to 9, 1 to 2, 3 to 6) as Double
+'   myCDF(9,1,3) = 0.1: myCDF(9,2,3) = 0.4:
+'   myCDF(9,1,4) = 0.4: myCDF(9,2,4) = 0.1:
+'   myCDF(9,1,5) = 0.4: myCDF(9,2,5) = 0.4:
+'   myCDF(9,1,6) = 0.1: myCDF(9,2,6) = 0.1:
+'   Debug.Print SampleDiscreteCDFon2D(myCDF, 9, 2)
+'   ' 40% chance of returning a 3, 10% chance of a 4, etc.
+'
+'------------------------------------------------------------------------------
+
+    Dim R As Single
+    R = Rnd()
+    
+    Dim i As Long
+    For i = LBound(CDF, 3) To UBound(CDF, 3)
+        If R <= CDF(FirstIndex, SecondIndex, i) Then
+            SampleDiscreteCDFon3D = i
+            Exit Function
+        End If
+    Next i
+    
+    ' If we got to this point, it must not have been a valid CDF because
+    ' the last element in the array was not a 1.
+    If RaiseError Then
+        Err.Raise vbObjectError + 1, "MacroStats.SampleDiscreteCDFon3D", _
+                  "Unable to sample from CDF - check last element is 1."
+    End If
+End Function
+
