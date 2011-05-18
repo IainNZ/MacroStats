@@ -55,7 +55,7 @@ Public Function SampleDiscreteCDF( _
 ) As Long
 '------------------------------------------------------------------------------
 ' SampleDiscreteCDF
-' Generate an random integer from a cumulative distribution function.
+' Generate a random integer from a cumulative distribution function.
 ' For more information about CDFs:
 ' http://en.wikipedia.org/wiki/Cumulative_distribution_function
 '
@@ -109,7 +109,7 @@ Public Function SampleDiscreteCDFon2D( _
 ) As Long
 '------------------------------------------------------------------------------
 ' SampleDiscreteCDFon2D
-' Generate an random integer from a cumulative distribution function.
+' Generate a random integer from a cumulative distribution function.
 ' Use this when you have a 2D array, where the CDF is in the second dimension.
 ' For more information about CDFs:
 ' http://en.wikipedia.org/wiki/Cumulative_distribution_function
@@ -167,7 +167,7 @@ Public Function SampleDiscreteCDFon3D( _
 ) As Long
 '------------------------------------------------------------------------------
 ' SampleDiscreteCDFon3D
-' Generate an random integer from a cumulative distribution function.
+' Generate a random integer from a cumulative distribution function.
 ' Use this when you have a 3D array, where the CDF is in the third dimension.
 ' For more information about CDFs:
 ' http://en.wikipedia.org/wiki/Cumulative_distribution_function
@@ -224,7 +224,7 @@ Public Function FlipCoin( _
 ) As Boolean
 '------------------------------------------------------------------------------
 ' FlipCoin
-' Returns a true with a provided probability.
+' Returns a true with the provided probability.
 '
 ' Input:
 '   Probability as Double

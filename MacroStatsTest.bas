@@ -1,12 +1,12 @@
 Attribute VB_Name = "MacroStatsTest"
-Public Sub TestCDFs()
+Public Sub TestProbability()
     Dim CDF() As Double, Counter() As Variant
-    Dim result As Integer
+    Dim result As Variant
     Dim i As Integer, j As Integer, k As Integer
     
     '//////////////////////////////////////////////////////////////////////////
-    ' 1.    Test 1D
-    ' 1.1   Random number tests
+    ' 1.    Test CDF 1D
+    ' 1.1   Random number test
     ReDim CDF(10 To 19) As Double
     ReDim Counter(10 To 19) As Variant
     CDF(10) = 0.1
@@ -17,7 +17,7 @@ Public Sub TestCDFs()
         result = MacroStats.SampleDiscreteCDF(CDF, True)
         Counter(result) = Counter(result) + 1 / 10000
     Next i
-    Debug.Print "Test 1.1 - 1D - Random number tests - ";
+    Debug.Print "Test 1.1 - 1D - Random number test - ";
     If Counter(10) > 0.09 And Counter(10) < 0.11 Then
         Debug.Print "Pass! ",
     Else
@@ -39,8 +39,8 @@ Public Sub TestCDFs()
     Debug.Print "Test 1.2 - 1D - Silent fail test - Pass!"
     
     '//////////////////////////////////////////////////////////////////////////
-    ' 2.    Test 2D
-    ' 2.1   Random number tests
+    ' 2.    Test CDF 2D
+    ' 2.1   Random number test
     ReDim CDF(1 To 2, 3 To 6) As Double
     ReDim Counter(3 To 6) As Variant
     CDF(1, 3) = 0.1: CDF(2, 3) = 0.4
@@ -51,7 +51,7 @@ Public Sub TestCDFs()
         result = MacroStats.SampleDiscreteCDFon2D(CDF, 2, True)
         Counter(result) = Counter(result) + 1 / 10000
     Next i
-    Debug.Print "Test 2.1 - 2D - Random number tests - ";
+    Debug.Print "Test 2.1 - 2D - Random number test - ";
     If Counter(3) > 0.39 And Counter(3) < 0.41 Then
         Debug.Print "Pass! ",
     Else
@@ -61,8 +61,8 @@ Public Sub TestCDFs()
     Debug.Print Round(Counter(5), 3); Round(Counter(6), 3)
 
     '//////////////////////////////////////////////////////////////////////////
-    ' 3.    Test 3D
-    ' 3.1   Random number tests
+    ' 3.    Test CDF 3D
+    ' 3.1   Random number test
     ReDim CDF(9, 1 To 2, 3 To 6) As Double
     ReDim Counter(3 To 6) As Variant
     CDF(9, 1, 3) = 0.1: CDF(9, 2, 3) = 0.4
@@ -73,7 +73,7 @@ Public Sub TestCDFs()
         result = MacroStats.SampleDiscreteCDFon3D(CDF, 9, 2, True)
         Counter(result) = Counter(result) + 1 / 10000
     Next i
-    Debug.Print "Test 3.1 - 3D - Random number tests - ";
+    Debug.Print "Test 3.1 - 3D - Random number test - ";
     If Counter(3) > 0.39 And Counter(3) < 0.41 Then
         Debug.Print "Pass! ",
     Else
@@ -81,5 +81,22 @@ Public Sub TestCDFs()
     End If
     Debug.Print Round(Counter(3), 3); Round(Counter(4), 3);
     Debug.Print Round(Counter(5), 3); Round(Counter(6), 3)
+    
+    '//////////////////////////////////////////////////////////////////////////
+    ' 4.    Test FlipCoin
+    ' 4.1   Random number test
+    ReDim Counter(1 To 2) As Variant
+    For i = 1 To 10000
+        result = MacroStats.FlipCoin(0.4)
+        If result Then Counter(1) = Counter(1) + 1 / 10000
+        If Not result Then Counter(2) = Counter(2) + 1 / 10000
+    Next i
+    Debug.Print "Test 4.1 - FlipCoin - Random number test - ";
+    If Counter(1) > 0.39 And Counter(1) < 0.41 Then
+        Debug.Print "Pass! ",
+    Else
+        Debug.Print "FAIL! ",
+    End If
+    Debug.Print Round(Counter(1), 3); Round(Counter(2), 3)
+    
 End Sub
-
