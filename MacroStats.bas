@@ -1,8 +1,7 @@
 Attribute VB_Name = "MacroStats"
 '------------------------------------------------------------------------------
 ' MacroStats
-' A collection of statistics-related helper functions for
-' Excel's VBA macro language.
+' A collection of statistics-related functions for Excel's VBA macro language.
 '
 ' By Iain Dunning, 2011
 ' http://www.iaindunning.com
@@ -48,9 +47,10 @@ Attribute VB_Name = "MacroStats"
 '     add a test that should ensure the problem is never reintroduced.
 '
 '------------------------------------------------------------------------------
+Option Explicit
 
 Public Function SampleDiscreteCDF( _
-    ByRef CDF() As Variant, _
+    ByRef CDF As Variant, _
     Optional ByVal RaiseError As Boolean = False _
 ) As Long
 '------------------------------------------------------------------------------
@@ -74,9 +74,9 @@ Public Function SampleDiscreteCDF( _
 ' Example Usage:
 '   Dim myCDF(3 to 6) as Double
 '   myCDF(3) = 0.1
-'   myCDF(4) = 0.4
-'   myCDF(5) = 0.4
-'   myCDF(6) = 0.1
+'   myCDF(4) = 0.5
+'   myCDF(5) = 0.9
+'   myCDF(6) = 1.0
 '   Debug.Print SampleDiscreteCDF(myCDF)
 '   ' 10% chance of returning a 3, 40% chance of a 4, etc.
 '
@@ -103,7 +103,7 @@ End Function
 
 
 Public Function SampleDiscreteCDFon2D( _
-    ByRef CDF() As Variant, _
+    ByRef CDF As Variant, _
     ByVal FirstIndex As Long, _
     Optional ByVal RaiseError As Boolean = False _
 ) As Long
@@ -130,10 +130,10 @@ Public Function SampleDiscreteCDFon2D( _
 '
 ' Example Usage:
 '   Dim myCDF(1 to 2, 3 to 6) as Double
-'   myCDF(1,3) = 0.1: myCDF(2,3) = 0.4:
-'   myCDF(1,4) = 0.4: myCDF(2,4) = 0.1:
-'   myCDF(1,5) = 0.4: myCDF(2,5) = 0.4:
-'   myCDF(1,6) = 0.1: myCDF(2,6) = 0.1:
+'   myCDF(1,3) = 0.1: myCDF(2,3) = 0.4
+'   myCDF(1,4) = 0.5: myCDF(2,4) = 0.5
+'   myCDF(1,5) = 0.9: myCDF(2,5) = 0.9
+'   myCDF(1,6) = 1.0: myCDF(2,6) = 1.0
 '   Debug.Print SampleDiscreteCDFon2D(myCDF, 2)
 '   ' 40% chance of returning a 3, 10% chance of a 4, etc.
 '
@@ -160,7 +160,7 @@ End Function
 
 
 Public Function SampleDiscreteCDFon3D( _
-    ByRef CDF() As Variant, _
+    ByRef CDF As Variant, _
     ByVal FirstIndex As Long, _
     ByVal SecondIndex As Long, _
     Optional ByVal RaiseError As Boolean = False _
@@ -190,10 +190,10 @@ Public Function SampleDiscreteCDFon3D( _
 '
 ' Example Usage:
 '   Dim myCDF(9 to 9, 1 to 2, 3 to 6) as Double
-'   myCDF(9,1,3) = 0.1: myCDF(9,2,3) = 0.4:
-'   myCDF(9,1,4) = 0.4: myCDF(9,2,4) = 0.1:
-'   myCDF(9,1,5) = 0.4: myCDF(9,2,5) = 0.4:
-'   myCDF(9,1,6) = 0.1: myCDF(9,2,6) = 0.1:
+'   myCDF(9,1,3) = 0.1: myCDF(9,2,3) = 0.4
+'   myCDF(9,1,4) = 0.5: myCDF(9,2,4) = 0.5
+'   myCDF(9,1,5) = 0.9: myCDF(9,2,5) = 0.9
+'   myCDF(9,1,6) = 1.0: myCDF(9,2,6) = 1.0
 '   Debug.Print SampleDiscreteCDFon2D(myCDF, 9, 2)
 '   ' 40% chance of returning a 3, 10% chance of a 4, etc.
 '

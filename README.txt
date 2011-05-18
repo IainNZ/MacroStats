@@ -1,6 +1,5 @@
 MacroStats
-A collection of statistics-related helper functions for
-Excel's VBA macro language.
+A collection of statistics-related functions for Excel's VBA macro language.
 
 By Iain Dunning, 2011
 http://www.iaindunning.com
