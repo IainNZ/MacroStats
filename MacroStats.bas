@@ -218,3 +218,28 @@ Public Function SampleDiscreteCDFon3D( _
     End If
 End Function
 
+
+Public Function FlipCoin( _
+    ByVal Probability As Double _
+) As Boolean
+'------------------------------------------------------------------------------
+' FlipCoin
+' Returns a true with a provided probability.
+'
+' Input:
+'   Probability as Double
+'       - The probability we are using to generate the True/False
+'
+' Return:
+'   True or False, with probability provided.
+'
+' Example Usage:
+'   Debug.Print FlipCoin(0.5)
+'   ' Like flipping a coin, 50/50 of being True
+'   Debug.Print FlipCoin(0.6) ' 60/40..., etc.
+'
+'------------------------------------------------------------------------------
+    
+    FlipCoin = (Rnd() < Probability)
+    
+End Function
