@@ -36,7 +36,8 @@ LIBRARY CONTENTS
 See MacroStats.bas for full descriptions of functions, as well as samples
 that show how they can be used.
 
-Probability-related:
+Probability-related
+===================
 * SampleDiscreteCDF
 	Inputs: CDF()
 	Generate a random integer from a cumulative distribution function.
@@ -54,3 +55,15 @@ Probability-related:
 * FlipCoin
 	Inputs: Probability
 	Returns a true with the provided probability.
+	
+Distribution-related
+====================
+* FitNormalDistributionToData
+	Inputs: data()
+    Outputs: mean, stddev
+	Fits a normal distribution to a data set provided by the user.
+	Uses Maximum Likelihood Estimation.
+	
+* RandomFromNormal
+	Inputs: mean, stddev
+	Uses Box-Mueller to generate a random normal number.

@@ -1,4 +1,6 @@
 Attribute VB_Name = "MacroStatsTest"
+Option Explicit
+
 Public Sub TestProbability()
     Dim CDF() As Double, Counter() As Variant
     Dim result As Variant
@@ -99,4 +101,23 @@ Public Sub TestProbability()
     End If
     Debug.Print Round(Counter(1), 3); Round(Counter(2), 3)
     
+End Sub
+
+Public Sub TestDistributionFitting()
+    Dim i As Integer
+
+    '//////////////////////////////////////////////////////////////////////////
+    ' 1.    Test Normal fitting
+    ' 1.1   Fit to data
+    Dim normalData(1 To 1000) As Double
+    For i = 1 To 1000
+        normalData(i) = MacroStats.RandomFromNormal(3, 2)
+    Next i
+    Dim normMean As Double, normStdDev As Double
+    Debug.Print "Test 1.1 - Normal - Generate + FitToData test - ";
+    If MacroStats.FitNormalDistributionToData(normalData, normMean, normStdDev) Then
+        Debug.Print "Fitted! Mean [3] = "; Round(normMean, 2); ", SD [2] = "; Round(normStdDev, 2)
+    Else
+        Debug.Print "Fitting error!"
+    End If
 End Sub
