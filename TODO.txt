@@ -1,0 +1,19 @@
+List of functions to include in library:
+
+From "Stats_functions"
+----------------------
+FitBeta
+FitGamma
+Digamma
+Trigamma
+EvaluateNormFit
+EvaluateGammaFit
+EvaluateBetaFit
+
+From "NLOpt"
+----------------------
+FitGammaToPercentile
+
+Misc
+----
+Sorting algorithms (need sort for checking fit)
