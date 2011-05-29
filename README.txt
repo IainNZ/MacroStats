@@ -25,10 +25,10 @@ PROJECT LAYOUT
 	- Don't need to add this to you to your project.
 * MacroStatsTest.bas
 	- Mainly used to aid development, not necessary to include in your
-      projects.
+          projects.
 	- Used to aid development by ensuring that the functions work as
-      promised. Ff you encounter a problem and report it to me, I'll
-      add a test that should ensure the problem is never reintroduced.
+          promised. Ff you encounter a problem and report it to me, I'll
+          add a test that should ensure the problem is never reintroduced.
 
 ------------------------------------------------------------------------------
 LIBRARY CONTENTS
@@ -60,9 +60,18 @@ Distribution-related
 ====================
 * FitNormalDistributionToData
 	Inputs: data()
-    Outputs: mean, stddev
+    	Outputs: mean, stddev
 	Fits a normal distribution to a data set provided by the user.
 	Uses Maximum Likelihood Estimation.
+
+* FitNormalDistributionToPercentiles
+	Inputs: X1, P1, X2, P2
+	Outputs: mean, stddev
+	Fits a normal distribution to two percentiles.
+	e.g.
+	50th percentile is 60 => X1 = 60, P1 = 0.5
+	84th percentile is 80 >= X2 = 80, P2 = 0.84
+	-> mean = 60, stddev = 20
 	
 * RandomFromNormal
 	Inputs: mean, stddev

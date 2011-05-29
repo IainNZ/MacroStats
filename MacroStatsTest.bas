@@ -120,4 +120,16 @@ Public Sub TestDistributionFitting()
     Else
         Debug.Print "Fitting error!"
     End If
+    ' 1.2   Fit to percentiles
+    Debug.Print "Test 1.2 - Normal - Fit to percentile test"
+    FitNormalDistributionToPercentiles 0, 0.5, 1, 0.841, normMean, normStdDev
+    Debug.Print " 00.0 0.500 01.0 0.841 -> ", Round(normMean, 1), Round(normStdDev, 1)
+    FitNormalDistributionToPercentiles 50, 0.5, 84.1, 0.841, normMean, normStdDev
+    Debug.Print " 50.0 0.500 84.1 0.841 -> ", Round(normMean, 1), Round(normStdDev, 1)
+    FitNormalDistributionToPercentiles 60, 0.5, 80, 0.841, normMean, normStdDev
+    Debug.Print " 60.0 0.500 80.0 0.841 -> ", Round(normMean, 1), Round(normStdDev, 1)
+    FitNormalDistributionToPercentiles 40, 0.4, 60, 0.6, normMean, normStdDev
+    Debug.Print " 40.0 0.400 60.0 0.600 -> ", Round(normMean, 1), Round(normStdDev, 1)
+    FitNormalDistributionToPercentiles 60, 0.6, 40, 0.4, normMean, normStdDev
+    Debug.Print " 60.0 0.600 40.0 0.400 -> ", Round(normMean, 1), Round(normStdDev, 1)
 End Sub

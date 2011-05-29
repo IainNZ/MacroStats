@@ -304,9 +304,64 @@ Public Function FitNormalDistributionToData( _
     Exit Function
     
 normalFitError:
+    mean = 0
+    stddev = 0
     FitNormalDistributionToData = False
 End Function
 
+
+Public Function FitNormalDistributionToPercentiles( _
+    ByVal X1 As Double, ByVal P1 As Double, _
+    ByVal X2 As Double, ByVal P2 As Double, _
+    ByRef mean As Double, _
+    ByRef stddev As Double _
+) As Boolean
+'------------------------------------------------------------------------------
+' FitNormalDistributionToPercentiles
+' Fits a normal distribution to two percentiles.
+'   - http://www.johndcook.com/quantiles_parameters.pdf
+'
+' Input:
+'   X1 as Double, P1 as Double
+'   X2 as Double, P2 as Double
+'       - Percentile #1 and #2, e.g.
+'         50th percentile is 60 => X1 = 60, P1 = 0.5
+'         84th percentile is 80 >= X2 = 80, P2 = 0.84
+'
+' Output:
+'   mean as Double
+'   stddev as Double
+'       - The fitted parameters of the normal distribution.
+'         e.g. for the above example, mean = 60, stddev = 20
+'
+' Return:
+'   True if succesfully fitted, False if error.
+'
+' Example Usage:
+'   Dim normMean As Double, normStdDev As Double
+'   If MacroStats.FitNormalDistributionToData(60,0.5,80,0.84, normMean, normStdDev) Then
+'       Debug.Print "Fitted! Mean [60] = "; normMean; ", SD [20] = "; normStdDev
+'   Else
+'       Debug.Print "Fitting error!"
+'   End If
+'
+'------------------------------------------------------------------------------
+    On Error GoTo normalFitError
+
+    stddev = (X2 - X1) / _
+             (WorksheetFunction.NormSInv(P2) - WorksheetFunction.NormSInv(P1))
+             
+    mean = (X1 * WorksheetFunction.NormSInv(P2) - X2 * WorksheetFunction.NormSInv(P1)) / _
+           (WorksheetFunction.NormSInv(P2) - WorksheetFunction.NormSInv(P1))
+
+    FitNormalDistributionToPercentiles = True
+    Exit Function
+    
+normalFitError:
+    mean = 0
+    stddev = 0
+    FitNormalDistributionToPercentiles = False
+End Function
 
 Public Function RandomFromNormal( _
     ByVal mean As Double, _
