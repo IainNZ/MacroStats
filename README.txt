@@ -60,7 +60,7 @@ Distribution-related
 ====================
 * FitNormalDistributionToData
 	Inputs: data()
-    	Outputs: mean, stddev
+    Outputs: mean, stddev
 	Fits a normal distribution to a data set provided by the user.
 	Uses Maximum Likelihood Estimation.
 
@@ -76,3 +76,17 @@ Distribution-related
 * RandomFromNormal
 	Inputs: mean, stddev
 	Uses Box-Mueller to generate a random normal number.
+	
+* FitGammaDistributionToData
+	Inputs: data(),
+    Outputs: shapeP, scaleP
+	Fits a gamma distribution to a data set provided by the user.
+	Uses Maximum Likelihood Estimation with Newton-Rhapson.
+
+* FitGammaDistributionToPercentiles
+	Inputs: X1, P1, X2, P2
+	Outputs: shapeP, scaleP
+	e.g.
+	50th percentile is 5000 => X1 = 5000, P1 = 0.5
+	84th percentile is 6500 >= X2 = 6500, P2 = 0.84
+	-> shape = 13.5, scale = 378.9
