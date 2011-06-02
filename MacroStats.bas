@@ -401,3 +401,123 @@ Public Function RandomFromNormal( _
     
 End Function
 
+
+Public Function FitGammaDistributionToData( _
+    ByRef data As Variant, _
+    ByRef shapeP As Double, _
+    ByRef scaleP As Double _
+) As Boolean
+'------------------------------------------------------------------------------
+' FitGammaDistributionToData
+' Fits a gamma distribution to a data set provided by the user.
+' Uses Maximum Likelihood Estimation with Newton-Rhapson:
+'   - http://en.wikipedia.org/wiki/Gamma_distribution
+'           #Maximum_likelihood_estimation
+'
+' Input:
+'   data As Variant
+'       - A one dimensional array of numbers
+'
+' Output:
+'   shapeP as Double
+'   scaleP as Double
+'       - The fitted parameters of the gamma distribution
+'
+' Return:
+'   True if succesfully fitted, False if not possible.
+'
+' Example Usage:
+'
+'------------------------------------------------------------------------------
+    On Error GoTo gammaFitError
+
+    Dim i As Integer, n As Integer
+    Dim k As Double
+   
+    ' Data size
+    n = UBound(data) - LBound(data) + 1
+   
+    ' Calculate s as defined on the Wikipedia page
+    Dim s As Double
+    s = 0
+    ' Step 1. Sum xi
+    For i = 1 To n
+        s = s + data(i)
+    Next i
+    ' Step 2. log(1/N sum xi)
+    s = Log(s / n)
+    ' Step 3. log(1/N sum xi) - 1/n sum ln xi
+    For i = 1 To n
+        s = s - 1 / n * Log(data(i))
+    Next i
+    
+    ' Calculate shape parameter iteratively
+    k = 1
+    i = 0
+    Dim nextK As Double, relChange As Double
+    Do While True
+        i = i + 1
+        ' Check its actually converging
+        If i = 100 Then Err.Raise vbObjectError
+        
+        ' Iterate
+        nextK = k - (Log(k) - Digamma(k) - s) / (1 / k - Trigamma(k))
+        
+        ' Terminating condition
+        relChange = Abs(nextK - k) / k
+        
+        k = nextK
+        If relChange < 0.0001 Then Exit Do
+    Loop
+    shapeP = k
+    
+    ' Get scale parameter from shape (MLE)
+    scaleP = 0
+    For i = 1 To n
+        scaleP = scaleP + (1 / (k * n)) * data(i)
+    Next i
+    
+    FitGammaDistributionToData = True
+    Exit Function
+    
+gammaFitError:
+    shapeP = 0
+    scaleP = 0
+    FitGammaDistributionToData = False
+End Function
+
+'------------------------------------------------------------------------------
+' Digamma
+' Logarithmic derivative of the gamma function
+' Used for fitting Gamma distribution.
+' Source of this approximation: Choi and Wette (1969)
+' via http://en.wikipedia.org/wiki/Gamma_distribution
+'------------------------------------------------------------------------------
+Function Digamma(k As Double) As Double
+    Dim k2 As Double
+    k2 = k * k
+    
+    If k < 8 Then
+        Digamma = Digamma(k + 1) - 1 / k
+    Else
+        Digamma = Log(k) - (1 + (1 - (1 / 10 - 1 / (21 * k2)) / k2) / (6 * k)) / (2 * k)
+    End If
+End Function
+
+'------------------------------------------------------------------------------
+' Trigamma
+' Derivative of the digamma function
+' Used for fitting Gamma distribution.
+' Source of this approximation: Choi and Wette (1969)
+' via http://en.wikipedia.org/wiki/Gamma_distribution
+'------------------------------------------------------------------------------
+Function Trigamma(k As Double) As Double
+    Dim k2 As Double
+    k2 = k * k
+    
+    If k < 8 Then
+        Trigamma = Trigamma(k + 1) + 1 / k2
+    Else
+        Trigamma = (1 + (1 + (1 - (1 / 5 - 1 / (7 * k2)) / k2) / (3 * k)) / (2 * k)) / k
+    End If
+End Function

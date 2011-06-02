@@ -3,9 +3,6 @@ List of functions to include in library:
 From "Stats_functions"
 ----------------------
 FitBeta
-FitGamma
-Digamma
-Trigamma
 EvaluateNormFit
 EvaluateGammaFit
 EvaluateBetaFit
