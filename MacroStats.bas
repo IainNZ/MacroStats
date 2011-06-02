@@ -521,3 +521,91 @@ Function Trigamma(k As Double) As Double
         Trigamma = (1 + (1 + (1 - (1 / 5 - 1 / (7 * k2)) / k2) / (3 * k)) / (2 * k)) / k
     End If
 End Function
+
+
+Public Function FitGammaDistributionToPercentiles( _
+    ByVal X1 As Double, ByVal P1 As Double, _
+    ByVal X2 As Double, ByVal P2 As Double, _
+    ByRef shapeP As Double, _
+    ByRef scaleP As Double _
+) As Boolean
+'------------------------------------------------------------------------------
+' FitGammaDistributionToPercentiles
+' Fits a gamma distribution to two percentiles.
+'   - http://www.johndcook.com/quantiles_parameters.pdf
+'
+' Input:
+'   X1 as Double, P1 as Double
+'   X2 as Double, P2 as Double
+'       - Percentile #1 and #2, e.g.
+'         50th percentile is 5000 => X1 = 5000, P1 = 0.5
+'         84th percentile is 6500 >= X2 = 6500, P2 = 0.84
+'
+' Output:
+'   shapeP as Double
+'   scaleP as Double
+'       - The fitted parameters of the gamma distribution.
+'         e.g. for the above example, shape = 13.5, scale = 378.9
+'
+' Return:
+'   True if succesfully fitted, False if error.
+'
+' Example Usage:
+'   Dim gammaShape As Double, gammaScale As Double
+'   If MacroStats.FitGammaDistributionToPercentiles(5000,0.5,6500,0.841,
+'                                                   gammaShape, gammaScale) Then
+'       Debug.Print "Fitted! Shape [13.5] = "; gammaShape; ", Scale [378.9] = "; gammaScale
+'   Else
+'       Debug.Print "Fitting error!"
+'   End If
+'
+'------------------------------------------------------------------------------
+    On Error GoTo gammaFitError
+
+    ' Use bisection search to find roots of the equation
+    ' Make sure LHS and RHS are opposite signs so we can start
+    Dim LHS As Double, RHS As Double, MID As Double
+    LHS = 1
+    RHS = 1
+    Do While GammaObj(LHS, X1, P1, X2, P2) < 0
+        LHS = LHS / 2
+    Loop
+    Do While GammaObj(RHS, X1, P1, X2, P2) > 0
+        RHS = RHS * 2
+    Loop
+    
+    ' Begin root finding
+    Do While Abs(RHS - LHS) > 0.001
+        MID = (RHS + LHS) / 2
+        If (GammaObj(LHS, X1, P1, X2, P2) * GammaObj(MID, X1, P1, X2, P2)) < 0 Then
+            ' Bring in on RHS
+            RHS = MID
+        ElseIf (GammaObj(RHS, X1, P1, X2, P2) * GammaObj(MID, X1, P1, X2, P2)) < 0 Then
+            ' Bring in on LHS
+            LHS = MID
+        Else
+            ' MID is 0 -> done
+            Exit Do
+        End If
+    Loop
+    
+    ' Turn into parameters
+    shapeP = MID
+    scaleP = X1 / WorksheetFunction.GammaInv(P1, shapeP, 1)
+    
+    FitGammaDistributionToPercentiles = True
+    Exit Function
+    
+gammaFitError:
+    shapeP = 0
+    scaleP = 0
+    FitGammaDistributionToPercentiles = False
+End Function
+
+'------------------------------------------------------------------------------
+' GammaObj [PRIVATE]
+' Used by FitGammaDistributionToPercentiles
+'------------------------------------------------------------------------------
+Private Function GammaObj(alpha, X1, P1, X2, P2)
+    GammaObj = WorksheetFunction.GammaInv(P2, alpha, 1) / WorksheetFunction.GammaInv(P1, alpha, 1) - X2 / X1
+End Function

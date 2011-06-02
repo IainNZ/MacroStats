@@ -7,10 +7,6 @@ EvaluateNormFit
 EvaluateGammaFit
 EvaluateBetaFit
 
-From "NLOpt"
-----------------------
-FitGammaToPercentile
-
 Misc
 ----
 Sorting algorithms (need sort for checking fit)

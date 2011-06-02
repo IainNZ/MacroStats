@@ -146,13 +146,8 @@ Public Sub TestDistributionFitting()
         Debug.Print "Fitting error!"
     End If
     ' 2.2   Fit to percentiles
-    'Debug.Print "Test 2.2 - Normal - Fit to percentile test"
-    'FitNormalDistributionToPercentiles 0, 0.5, 1, 0.841, normMean, normStdDev
-    'Debug.Print " 00.0 0.500 01.0 0.841 -> ", Round(normMean, 1), Round(normStdDev, 1)
-    'FitNormalDistributionToPercentiles 50, 0.5, 84.1, 0.841, normMean, normStdDev
-    'Debug.Print " 50.0 0.500 84.1 0.841 -> ", Round(normMean, 1), Round(normStdDev, 1)
-    'FitNormalDistributionToPercentiles 60, 0.5, 80, 0.841, normMean, normStdDev
-    'Debug.Print " 60.0 0.500 80.0 0.841 -> ", Round(normMean, 1), Round(normStdDev, 1)
-    'FitNormalDistributionToPercentiles 60, 0.5, 80, 0.841, normMean, normStdDev
-    'Debug.Print " 60.0 0.500 80.0 0.841 -> ", Round(normMean, 1), Round(normStdDev, 1)
+    Debug.Print "Test 2.2 - Gamma - Fit to percentile test"
+    FitGammaDistributionToPercentiles 5000, 0.5, 6500, 0.841, gammaShape, gammaScale
+    Debug.Print "5000, 0.5, 6500, 0.841 -> [13.5, 378.9]", Round(gammaShape, 2), Round(gammaScale, 2)
+    
 End Sub
