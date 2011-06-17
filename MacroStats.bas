@@ -486,6 +486,8 @@ gammaFitError:
     FitGammaDistributionToData = False
 End Function
 
+
+Private Function Digamma(k As Double) As Double
 '------------------------------------------------------------------------------
 ' Digamma
 ' Logarithmic derivative of the gamma function
@@ -493,7 +495,6 @@ End Function
 ' Source of this approximation: Choi and Wette (1969)
 ' via http://en.wikipedia.org/wiki/Gamma_distribution
 '------------------------------------------------------------------------------
-Function Digamma(k As Double) As Double
     Dim k2 As Double
     k2 = k * k
     
@@ -504,6 +505,8 @@ Function Digamma(k As Double) As Double
     End If
 End Function
 
+
+Private Function Trigamma(k As Double) As Double
 '------------------------------------------------------------------------------
 ' Trigamma
 ' Derivative of the digamma function
@@ -511,7 +514,6 @@ End Function
 ' Source of this approximation: Choi and Wette (1969)
 ' via http://en.wikipedia.org/wiki/Gamma_distribution
 '------------------------------------------------------------------------------
-Function Trigamma(k As Double) As Double
     Dim k2 As Double
     k2 = k * k
     
